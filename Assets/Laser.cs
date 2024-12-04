@@ -6,6 +6,9 @@ public class Laser : MonoBehaviour
 {
     public int maxBounce;
     public Transform laserOrigin;
+    public GameObject laserEnd;
+    public Material power;
+    public Material off;
     private void OnDrawGizmos()
     {
         Vector3 currentPosition = laserOrigin.position;
@@ -26,7 +29,14 @@ public class Laser : MonoBehaviour
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(currentPosition, hit.point);
             }
-
+            if (Physics.Raycast(currentPosition, currentDirection, out hit, 200.0f) && hit.collider.CompareTag("LaserAccepter"))
+            {
+                laserEnd.GetComponent<Renderer>().material = power; 
+            }
+            else
+            {
+                laserEnd.GetComponent<Renderer>().material = off;
+            }
         }
     }
 }
