@@ -4,21 +4,29 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-   
-    public Transform lasersource;
-    private void Start()
+    public int maxBounce;
+    public Transform laserOrigin;
+    private void OnDrawGizmos()
     {
-        Reflect(lasersource.position, lasersource.transform.forward);
-    }
-    void Reflect(Vector3 startposition, Vector3 direction)
-    {
-        Ray ray = new Ray(startposition, direction);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        Vector3 currentPosition = laserOrigin.position;
+        Vector3 currentDirection = laserOrigin.transform.up;
+
+        for (int i = 0; i < maxBounce; i++)
         {
-            Vector3 reflectDir = Vector3.Reflect(ray.direction, hit.normal);
-            Debug.DrawRay(hit.point, reflectDir * 10, Color.red);
-            Reflect(hit.point, reflectDir);
+            RaycastHit hit;
+            if (Physics.Raycast(currentPosition, currentDirection, out hit, 200.0f) && hit.collider.CompareTag("Mirror"))
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(currentPosition, hit.point);
+                currentDirection = Vector3.Reflect(currentDirection, hit.normal);
+                currentPosition = hit.point;
+            }
+            else
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(currentPosition, hit.point);
+            }
+
         }
     }
 }
