@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Mirror
   - LaserAccepter
+  - Booster
+  - BoosterObject
+  - MirrorObject
   layers:
   - Default
   - TransparentFX
